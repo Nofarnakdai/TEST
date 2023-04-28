@@ -1,0 +1,50 @@
+name: Update latest release version
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  update_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get latest release version
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const latestRelease = await github.repos.getLatestRelease({
+              owner: 'Nofarnakdai',
+              repo: 'TEST'
+            });
+            console.log(latestRelease.tag_name);
+        id: latest_release
+
+      - name: Checkout Markdown repository
+        uses: actions/checkout@v2
+        with:
+          repository: 'Nofarnakdai/TEST'
+          ref: 'main'
+          path: 'TEST'
+
+      - name: Update Markdown page with latest release version
+        uses: actions/replace-text@v2
+        with:
+          path: 'TEST/version-history.md'
+          pattern: '(?<=Latest release: v)[\d\.]+'
+          replacement: '${{ steps.latest_release.outputs.result }}'
+
+      - name: Commit changes to Markdown repository
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Update latest release version"
+          commit_options: "--no-verify"
+          file_pattern: "TEST/version-history.md"
+          commit_user_email: "nofarnakdai@gmail.com"
+          commit_user_name: "Nofar Nakdai"
+
+      - name: Push changes to Markdown repository
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: 'main'
+          directory: 'TEST'
