@@ -7,6 +7,8 @@ on:
 jobs:
   update_release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Get latest release version
         uses: actions/github-script@v5
