@@ -38,7 +38,7 @@ jobs:
         with:
           commit_message: "Update latest release version"
           commit_options: "--no-verify"
-          file_pattern: "TEST/version-history.md"
+          file_pattern: "version-history.md"
           commit_user_email: "nofarnakdai@gmail.com"
           commit_user_name: "Nofar Nakdai"
 
