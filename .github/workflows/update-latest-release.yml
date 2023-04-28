@@ -7,8 +7,6 @@ on:
 jobs:
   update_release:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - name: Get latest release version
         uses: actions/github-script@v5
@@ -26,7 +24,7 @@ jobs:
         with:
           repository: 'Nofarnakdai/TEST'
           ref: 'main'
-          path: 'TEST'
+          path: 'version-history.md'
 
       - name: Update Markdown page with latest release version
         uses: actions/replace-text@v2
@@ -49,4 +47,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: 'main'
-          directory: 'TEST'
+          directory: 'version-history.md'
